@@ -11,4 +11,4 @@ ln -sfn ~/dotfiles/colors/* ~/.config/nvim/colors/*
 
 
 mkdir -p ~/.cache/dein/plugs
-ln -sfn ~/dotfiles/plugs/* ~/.cache/dein/plugs/
+ln -sfn ~/dotfiles/dein.toml ~/.cache/dein/plugs/dein.toml

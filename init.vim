@@ -4,12 +4,14 @@ set shiftwidth=4
 set smartindent
 set noswapfile
 set title
+set hidden
 set cursorline
 set showmatch
 set mouse=a
 set expandtab
 set clipboard=unnamed
 syntax enable
+set signcolumn=yes
 
 colorscheme lucario
 
@@ -28,13 +30,18 @@ nnoremap <C-l> <C-w>l
 
 inoremap <silent> jj <ESC>:<C-u>w<CR>
 
-
-if executable('go-langserver')
+if executable('pyls')
+  augroup LspPython
+    au!
     au User lsp_setup call lsp#register_server({
-        \ 'name': 'go-langserver',
-        \ 'cmd': {server_info->['go-langserver', '-mode', 'stdio']},
-        \ 'whitelist': ['go'],
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
         \ })
+
+    " omnifunc
+    autocmd FileType python setlocal omnifunc=lsp#complete
+  augroup end
 endif
 
 nmap <silent> <Leader>d :LspDefinition<CR>
@@ -64,8 +71,11 @@ if dein#load_state(s:dein_dir)
   call dein#load_toml(s:toml_dir . 'dein.toml',		{'lazy':0})
   call dein#add ('scrooloose/nerdtree')
   call dein#add ('fisadev/vim-isort')
-  call dein#add ('airblade/vim-gitgutter')
-
+  call dein#add ('ryanolsonx/vim-lsp-python')
+  call dein#add ('prabirshrestha/async.vim')
+  call dein#add ('prabirshrestha/vim-lsp')
+  call dein#add ('prabirshrestha/asyncomplete.vim')
+  call dein#add ('prabirshrestha/asyncomplete-lsp.vim')
 
   " Required:
   call dein#end()

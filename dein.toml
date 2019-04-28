@@ -62,13 +62,7 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'prabirshrestha/async.vim'
+repo = "airblade/vim-gitgutter"
 
 [[plugins]]
-repo = 'prabirshrestha/vim-lsp'
-
-[[plugins]]
-repo = 'prabirshrestha/asyncomplete.vim'
-
-[[plugins]]
-repo = 'prabirshrestha/asyncomplete-lsp.vim'
+repo = "tpope/vim-fugitive"
