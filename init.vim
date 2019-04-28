@@ -45,10 +45,6 @@ nmap <silent> <Leader>s :split \| :LspDefinition <CR>
 nmap <silent> <Leader>v :vsplit \| :LspDefinition <CR>
 
 
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
-
 "dein Scripts-----------------------------
 if &compatible
   set nocompatible 	      	   " Be iMproved
@@ -66,6 +62,9 @@ if dein#load_state(s:dein_dir)
   " Required:
   let s:toml_dir = expand('$HOME/.cache/dein/plugs/')
   call dein#load_toml(s:toml_dir . 'dein.toml',		{'lazy':0})
+  call dein#add ('scrooloose/nerdtree')
+  call dein#add ('fisadev/vim-isort')
+  call dein#add ('airblade/vim-gitgutter')
 
 
   " Required:

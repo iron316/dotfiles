@@ -1,3 +1,3 @@
-## this repository is tetsu's dotofiles
+## this repository is tetsu's dotfiles
 
 

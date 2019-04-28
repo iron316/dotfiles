@@ -4,8 +4,7 @@ sh ~/installer.sh ~/.cache/dein
 rm ~/installer.sh
 
 mkdir -p ~/.config/nvim
-ln -sfn ~/dotfiles/.vimrc ~/.config/nvim/init.vim
-ln -sfn ~/.config/nvim/init.vim ~/.vimrc
+ln -sfn ~/dotfiles/init.vim ~/.config/nvim/init.vim
 
 mkdir -p ~/.config/nvim/colors
 ln -sfn ~/dotfiles/colors/* ~/.config/nvim/colors/*
