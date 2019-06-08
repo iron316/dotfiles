@@ -43,6 +43,7 @@ if executable('pyls')
     autocmd FileType python setlocal omnifunc=lsp#complete
   augroup end
 endif
+let g:lsp_diagnostics_enabled = 0  " 警告やエラーの表示はALEに任せるのでOFF
 
 nmap <silent> <Leader>d :LspDefinition<CR>
 nmap <silent> <Leader>p :LspHover<CR>
