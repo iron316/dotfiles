@@ -45,7 +45,7 @@ hook_add = '''
 repo = 'Shougo/deoplete.nvim'
 depends = 'context_filetype.vim'
 on_i = 1
-hook_source = '''
+hook_add = '''
     call deoplete#enable()
     " No display of the number of competion list
     set shortmess+=c
@@ -84,13 +84,20 @@ hook_source = '''
 [[plugins]]
 repo = 'zchee/deoplete-clang'
 on_ft = ['c', 'cpp', 'cmake']
-hook_source = '''
+hook_add = '''
     let g:deoplete#sources#clang#libclang_path = system("llvm-config --prefix")[:-2] . '/lib/libclang.dylib'
     let g:deoplete#sources#clang#clang_header = system("llvm-config --prefix")[:-2] . '/lib/clang'
     let g:deoplete#sources#clang#sort_algo = 'priority'
     let g:deoplete#sources#clang#clang_complete_database="./build/"
 '''
 depends = ['deoplete.nvim']
+
+[[plugins]]
+repo = 'kannokanno/previm'
+on_ft = ['markdown','mkd', 'md']
+hook_add = '''
+  let g:previm_open_cmd = 'open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
+'''
 
 [[plugins]]
 repo = 'flazz/vim-colorschemes'
