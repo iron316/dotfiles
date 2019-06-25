@@ -7,7 +7,7 @@ mkdir -p ~/.config/nvim
 ln -sfn ~/dotfiles/init.vim ~/.config/nvim/init.vim
 
 mkdir -p ~/.config/nvim/colors
-ln -sfn ~/dotfiles/colors/* ~/.config/nvim/colors/*
+ln -sfn ~/dotfiles/colors/lucario.vim ~/.config/nvim/colors/lucario.vim
 ln -sfn ~/dotfiles/config/flake8 ~/.config/flake8
 ln -sfn ~/dotfiles/config/pep8 ~/.config/pep8
 

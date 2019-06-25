@@ -9,11 +9,14 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 alias -g la='ls -la'
 alias -g ll='ls -la'
 alias -g vi='nvim'
+alias -g gpp='g++ -o a'
+
 
 
 export PATH=~/.local/bin/:$PATH
 powerline-daemon -q
 . ~/.local/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
+
 
 autoload -Uz compinit && compinit
 setopt auto_list

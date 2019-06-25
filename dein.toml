@@ -99,8 +99,6 @@ hook_add = '''
   let g:previm_open_cmd = 'open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
 '''
 
-[[plugins]]
-repo = 'flazz/vim-colorschemes'
 
 [[plugins]]
 # lexima
