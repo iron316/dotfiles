@@ -1,1 +1,2 @@
-exec zsh
+# exec zsh
+alias z="zsh"

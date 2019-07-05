@@ -13,5 +13,6 @@ git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/py
 
 
 # install neo vim libraly
+pip install flake8 autopep8
 pip install pynvim
 pip install --user python-language-server
