@@ -6,6 +6,7 @@ pyenv global 3.7.3
 
 pip install --upgrade pip
 pip install --user powerline-status
+pip install --user powerline-shell
 
 source .zshrc
 # install virtualenv
