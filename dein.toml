@@ -92,6 +92,16 @@ hook_add = '''
 '''
 depends = ['deoplete.nvim']
 
+[[plugin]]
+repo = 'tbodt/deoplete-tabnine',
+on_ft = { 'do': './install.sh' }
+hook_add = '''
+call deoplete#custom#var('tabnine', {
+\ 'line_limit': 500,
+\ 'max_num_results': 20,
+\ })
+'''
+
 [[plugins]]
 repo = 'kannokanno/previm'
 on_ft = ['markdown','mkd', 'md']
