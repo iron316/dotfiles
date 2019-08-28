@@ -15,7 +15,7 @@ alias -g gpp='g++ -o a'
 
 export PATH=~/.local/bin/:$PATH
 powerline-daemon -q
-. ~/.local/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
+. ~/.local/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
 
 
 autoload -Uz compinit && compinit
