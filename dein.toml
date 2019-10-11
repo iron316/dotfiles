@@ -93,8 +93,7 @@ hook_add = '''
 depends = ['deoplete.nvim']
 
 [[plugin]]
-repo = 'tbodt/deoplete-tabnine',
-on_ft = { 'do': './install.sh' }
+repo = 'tbodt/deoplete-tabnine'
 hook_add = '''
 call deoplete#custom#var('tabnine', {
 \ 'line_limit': 500,

@@ -6,6 +6,7 @@ set noswapfile
 set title
 set hidden
 set cursorline
+set cursorcolumn
 set showmatch
 set mouse=a
 set expandtab
@@ -13,7 +14,10 @@ set clipboard=unnamed
 syntax enable
 set signcolumn=yes
 
+set wildmode=list:longest
+
 colorscheme lucario
+set background=dark
 
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 autocmd BufWritePre * :%s/\s\+$//ge
