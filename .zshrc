@@ -11,13 +11,6 @@ alias -g ll='ls -la'
 alias -g vi='nvim'
 alias -g gpp='g++ -o a'
 
-
-
-export PATH=~/.local/bin/:$PATH
-powerline-daemon -q
-. ~/.local/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
-
-
 autoload -Uz compinit && compinit
 setopt auto_list
 setopt auto_menu
@@ -85,3 +78,29 @@ function install_powerline_precmd() {
 if [ "$TERM" != "linux" ]; then
     install_powerline_precmd
 fi
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# fzf 関連
+export FZF_DEFAULT_OPTS='--color=fg+:11 --height 70% --reverse --select-1 --exit-0 --multi'
+fancy-ctrl-z () {
+  if [[ $#BUFFER -eq 0 ]]; then
+    BUFFER="fg"
+    zle accept-line
+  else
+    zle push-input
+    zle clear-screen
+  fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
+
+
+alias cdd='fzf-cdr'
+function fzf-cdr() {
+    target_dir=`cdr -l | sed 's/^[^ ][^ ]*  *//' | fzf`
+    target_dir=`echo ${target_dir/\~/$HOME}`
+    if [ -n "$target_dir" ]; then
+        cd $target_dir
+    fi
+}
