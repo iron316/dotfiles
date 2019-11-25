@@ -15,4 +15,4 @@ pip install flake8 autopep8
 pip install pynvim
 pip install --user python-language-server
 
-source ~/.zshrc
+zsh ~/.zshrc
