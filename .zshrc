@@ -1,6 +1,8 @@
 # pyenv
 export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
+if [[ -z "$VIRTUAL_ENV" ]]; then
+  eval "$(pyenv init -)"
+fi
 eval "$(pyenv virtualenv-init -)"
 pyenv rehash
 export VIRTUAL_ENV_DISABLE_PROMPT=1
@@ -104,3 +106,5 @@ function fzf-cdr() {
         cd $target_dir
     fi
 }
+fpath+=~/.zfunc
+export PATH="$HOME/.poetry/bin:$PATH"
