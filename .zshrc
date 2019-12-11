@@ -1,7 +1,7 @@
 # pyenv
 export PATH="$HOME/.pyenv/bin:$PATH"
 if [[ -z "$VIRTUAL_ENV" ]]; then
-  eval "$(pyenv init -)"
+    eval "$(pyenv init -)"
 fi
 eval "$(pyenv virtualenv-init -)"
 pyenv rehash
