@@ -13,4 +13,10 @@ ln -sfn ~/dotfiles/config/pep8 ~/.config/pep8
 
 mkdir -p ~/.cache/dein/plugs
 ln -sfn ~/dotfiles/dein.toml ~/.cache/dein/plugs/dein.toml
-pip install isort autopep8 flake8 pynvim jedi python-language-server
+
+pyenv virtualenv neovim
+pyenv activate neovim
+pip install -U python-language-server
+pip install jedi==0.15.0
+pip install isort autopep8 flake8 pynvim
+pyenv deactivate
