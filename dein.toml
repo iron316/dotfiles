@@ -186,3 +186,6 @@ hook_source = '''
 			\ 'show_ignored_files': 1,
 			\ })
 '''
+
+[[plugins]]
+repo = "junegunn/fzf.vim"
