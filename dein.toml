@@ -137,3 +137,52 @@ repo = "airblade/vim-gitgutter"
 
 [[plugins]]
 repo = "tpope/vim-fugitive"
+
+[[plugins]]
+repo ='kristijanhusak/defx-icons'
+
+[[plugins]]
+repo ='kristijanhusak/defx-git'
+hook_add = '''
+	let g:defx_git#indicators = {
+		\ 'Modified'  : '+',
+		\ 'Staged'    : '●',
+		\ 'Untracked' : '?',
+		\ 'Renamed'   : '➜',
+		\ 'Unmerged'  : '═',
+		\ 'Deleted'   : 'x',
+		\ 'Unknown'   : '?'
+		\ }
+'''
+
+[[plugins]]
+repo ='Shougo/defx.nvim'
+on_cmd = 'Defx'
+depends = ['defx-icons', 'defx-git']
+hook_add = '''
+	nnoremap <silent> <Space>f :<C-u>Defx -listed -resume -buffer-name=tab`tabpagenr()`<CR>
+'''
+hook_source = '''
+	function! Root(path) abort
+		return fnamemodify(a:path, ':t')
+	endfunction
+
+	call defx#custom#source('file', {
+			\ 'root': 'Root',
+			\})
+
+	call defx#custom#column('filename', {
+			\ 'directory_icon': '',
+			\ 'opened_icon': '',
+			\ })
+
+	call defx#custom#column('mark', {
+			\ 'readonly_icon': '✗',
+			\ 'selected_icon': '✓',
+			\ })
+
+	call defx#custom#option('_', {
+			\ 'columns': 'indent:git:icons:filename',
+			\ 'show_ignored_files': 1,
+			\ })
+'''
