@@ -15,8 +15,9 @@ mkdir -p ~/.cache/dein/plugs
 ln -sfn ~/dotfiles/dein.toml ~/.cache/dein/plugs/dein.toml
 
 pyenv virtualenv neovim
-pyenv activate neovim
+source $(pyenv root)/versions/neovim/bin/activate
+pip install --upgrade pip
 pip install -U python-language-server
 pip install jedi==0.15.0
 pip install isort autopep8 flake8 pynvim
-pyenv deactivate
+deactivate

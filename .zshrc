@@ -38,6 +38,8 @@ zinit snippet OMZ::plugins/git/git.plugin.zsh
 zinit light mollifier/anyframe
 zinit snippet OMZ::lib/completion.zsh
 zinit snippet OMZ::lib/compfix.zsh
+
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 zinit ice depth=1;
 zinit light romkatv/powerlevel10k
 
@@ -66,3 +68,8 @@ function fzf-cdr() {
         cd $target_dir
     fi
 }
+
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="$HOME/.poetry/bin:$PATH"
+fpath+=~/.zfunc

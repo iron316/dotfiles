@@ -9,6 +9,11 @@ pip install --upgrade pip
 # install virtualenv
 git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
 
-
-zsh ~/.zshrc
-
+curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+source ~/.poetry/env
+echo 'export PATH="$HOME/.poetry/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+echo "fpath+=~/.zfunc" >> .zshrc
+mkdir ~/.zfunc # ないなら
+poetry completions zsh > ~/.zfunc/_poetry
+compinit
