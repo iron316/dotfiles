@@ -35,29 +35,6 @@ nnoremap <Leader>m :bp<CR>
 
 inoremap <silent> jj <ESC>:<C-u>w<CR>
 
-if executable('pyls')
-  augroup LspPython
-    au!
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'whitelist': ['python'],
-        \ })
-
-    " omnifunc
-    autocmd FileType python setlocal omnifunc=lsp#complete
-  augroup end
-endif
-let g:lsp_diagnostics_enabled = 0  " 警告やエラーの表示はALEに任せるのでOFF
-
-nmap <silent> <Leader>d :LspDefinition<CR>
-nmap <silent> <Leader>p :LspHover<CR>
-nmap <silent> <Leader>r :LspReferences<CR>
-nmap <silent> <Leader>i :LspImplementation<CR>
-nmap <silent> <Leader>s :split \| :LspDefinition <CR>
-nmap <silent> <Leader>v :vsplit \| :LspDefinition <CR>
-
-
 "dein Scripts-----------------------------
 if &compatible
   set nocompatible 	      	   " Be iMproved
@@ -75,12 +52,10 @@ if dein#load_state(s:dein_dir)
   " Required:
   let s:toml_dir = expand('$HOME/.cache/dein/plugs/')
   call dein#load_toml(s:toml_dir . 'dein.toml',		{'lazy':0})
-  call dein#add ('fisadev/vim-isort')
-  call dein#add ('ryanolsonx/vim-lsp-python')
-  call dein#add ('prabirshrestha/async.vim')
-  call dein#add ('prabirshrestha/vim-lsp')
-  call dein#add ('prabirshrestha/asyncomplete.vim')
-  call dein#add ('prabirshrestha/asyncomplete-lsp.vim')
+  call dein#add('Shougo/deoplete.nvim')
+  call dein#add('liuchengxu/vista.vim')
+
+  call dein#add('lighttiger2505/deoplete-vim-lsp')
 
   " Required:
   call dein#end()
@@ -155,3 +130,105 @@ autocmd FileType defx call s:defx_my_settings()
     endfunction
 
 " defx Config: end -------------------
+
+
+" vim-lsp
+if (executable('pyls'))
+    " pylsの起動定義
+    augroup LspPython
+        autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'pyls',
+            \ 'cmd': { server_info -> ['pyls'] },
+            \ 'whitelist': ['python'],
+            \})
+    augroup END
+endif
+
+nnoremap <C-]> :<C-u>LspDefinition<CR>
+" 定義情報のホバー表示
+nnoremap K :<C-u>LspHover<CR>
+" 名前変更
+nnoremap <LocalLeader>R :<C-u>LspRename<CR>
+" 参照検索
+nnoremap <LocalLeader>n :<C-u>LspReferences<CR>
+" Lint結果をQuickFixで表示
+nnoremap <LocalLeader>f :<C-u>LspDocumentDiagnostics<CR>
+" テキスト整形
+nnoremap <LocalLeader>s :<C-u>LspDocumentFormat<CR>
+" オムニ補完を利用する場合、定義の追加
+set omnifunc=lsp#complete
+nmap <silent> <Leader>d :LspDefinition<CR>
+nmap <silent> <Leader>p :LspHover<CR>
+nmap <silent> <Leader>r :LspReferences<CR>
+nmap <silent> <Leader>i :LspImplementation<CR>
+nmap <silent> <Leader>s :split \| :LspDefinition <CR>
+nmap <silent> <Leader>v :vsplit \| :LspDefinition <CR>
+
+" formatter
+augroup LspAutoFormatting
+    autocmd!
+    autocmd BufWritePre *.py LspDocumentFormatSync
+augroup END
+
+" linter
+" pylsの設定。LinterのON/OFFなどが可能
+let s:pyls_config = {'pyls': {'plugins': {
+    \   'pycodestyle': {'enabled': v:true},
+    \   'pydocstyle': {'enabled': v:false},
+    \   'pylint': {'enabled': v:false},
+    \   'flake8': {'enabled': v:true},
+    \   'jedi_definition': {
+    \     'follow_imports': v:true,
+    \     'follow_builtin_imports': v:true,
+    \   },
+    \ }}}
+" pylsの起動定義
+augroup LspPython
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': { server_info -> ['pyls'] },
+        \ 'whitelist': ['python'],
+        \ 'workspace_config': s:pyls_config
+        \})
+augroup END
+
+" deoplete neovim
+let g:deoplete#enable_at_startup = 1
+
+inoremap <expr><C-h> deoplete#smart_close_popup()."<C-h>"
+inoremap <expr><BS> deoplete#smart_close_popup()."<C-h>"
+
+call deoplete#custom#option({
+    \ 'auto_complete': v:true,
+    \ 'min_pattern_length': 2,
+    \ 'auto_complete_delay': 0,
+    \ 'auto_refresh_delay': 20,
+    \ 'refresh_always': v:true,
+    \ 'smart_case': v:true,
+    \ 'camel_case': v:true,
+    \ })
+let s:use_lsp_sources = ['lsp', 'dictionary', 'file']
+call deoplete#custom#option('sources', {
+    \ 'go': s:use_lsp_sources,
+    \ 'python': s:use_lsp_sources,
+    \ 'vim': ['vim', 'buffer', 'dictionary', 'file'],
+    \})
+
+" vista vim
+let g:vista_sidebar_width = 40
+let g:vista_echo_cursor = 0
+
+" デフォルトの情報ソースをctagsにする
+let g:vista_default_executive = 'ctags'
+" 特定の言語の場合vim-lspを利用した情報ソースを利用するようにする
+let g:vista_executive_for = {
+    \ 'go': 'vim_lsp',
+    \ 'python': 'vim_lsp',
+    \ }
+
+" トグル(アウトラインを非表示の場合は表示、表示済みの場合は非表示に)
+nnoremap <silent> <Leader>o :<C-u>Vista!!<CR>
+
+

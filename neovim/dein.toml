@@ -40,74 +40,18 @@ hook_add = '''
   autocmd FileType python setlocal completeopt-=preview
 '''
 
-## c++ plugin
 [[plugins]]
-repo = 'Shougo/deoplete.nvim'
-depends = 'context_filetype.vim'
-on_i = 1
+repo = 'prabirshrestha/vim-lsp'
 hook_add = '''
-    call deoplete#enable()
-    " No display of the number of competion list
-    set shortmess+=c
-
-    " <TAB>: completion.
-    inoremap <silent><expr> <C-k>
-          \ pumvisible() ? "\<C-n>" :
-          \ <SID>check_back_space() ? "\<C-k>" :
-          \ deoplete#manual_complete()
-    function! s:check_back_space() abort
-      let col = col('.') - 1
-      return !col || getline('')[col - 1]  =~ '\s'
-    endfunction
-
-    " <S-TAB>: completion back.
-    inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<C-h>"
-    " <C-e>: popup cancel
-    inoremap <expr><C-e>       deoplete#cancel_popup()
-
-    call deoplete#custom#source('_', 'matchers', ['matcher_head'])
-    call deoplete#custom#source('_', 'converters', [
-          \ 'converter_remove_paren',
-          \ 'converter_remove_overlap',
-          \ 'matcher_length',
-          \ 'converter_truncate_abbr',
-          \ 'converter_truncate_menu',
-          \ 'converter_auto_delimiter',
-          \ ])
-    call deoplete#custom#option('keyword_patterns', {
-          \ '_': '[a-zA-Z_]\k*\(?',
-          \ 'tex': '[^\w|\s][a-zA-Z_]\w*',
-          \ })
-    call deoplete#custom#option('camel_case', v:true)
+  let g:lsp_signs_enabled = 1
+  let g:lsp_diagnostics_enabled = 1
+  let g:lsp_diagnostics_echo_cursor = 1
+  let g:lsp_virtual_text_enabled = 1
+  let g:lsp_signs_error = {'text': '✗'}
+  let g:lsp_signs_warning = {'text': '‼'}
+  let g:lsp_signs_information = {'text': 'i'}
+  let g:lsp_signs_hint = {'text': '?'}
 '''
-
-[[plugins]]
-repo = 'zchee/deoplete-clang'
-on_ft = ['c', 'cpp', 'cmake']
-hook_add = '''
-    let g:deoplete#sources#clang#libclang_path = system("llvm-config --prefix")[:-2] . '/lib/libclang.dylib'
-    let g:deoplete#sources#clang#clang_header = system("llvm-config --prefix")[:-2] . '/lib/clang'
-    let g:deoplete#sources#clang#sort_algo = 'priority'
-    let g:deoplete#sources#clang#clang_complete_database="./build/"
-'''
-depends = ['deoplete.nvim']
-
-[[plugin]]
-repo = 'tbodt/deoplete-tabnine'
-hook_add = '''
-call deoplete#custom#var('tabnine', {
-\ 'line_limit': 500,
-\ 'max_num_results': 20,
-\ })
-'''
-
-[[plugins]]
-repo = 'kannokanno/previm'
-on_ft = ['markdown','mkd', 'md']
-hook_add = '''
-  let g:previm_open_cmd = 'open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
-'''
-
 
 [[plugins]]
 # lexima
