@@ -22,213 +22,115 @@ set background=dark
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 autocmd BufWritePre * :%s/\s\+$//ge
 
-map <C-g> :GitGutterToggle<CR>
-map <C-i> :Isort<CR>
 let mapleader = "\<Space>"
 
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
-nnoremap <Leader>n :bn<CR>
-nnoremap <Leader>m :bp<CR>
+
+nnoremap <Leader>v :vs<CR>
+nnoremap <Leader>h :sp<CR>
 
 inoremap <silent> jj <ESC>:<C-u>w<CR>
 
-"dein Scripts-----------------------------
-if &compatible
-  set nocompatible 	      	   " Be iMproved
-endif
 
-set runtimepath+=$HOME/.cache/dein/repos/github.com/Shougo/dein.vim
 let g:python3_host_prog = $PYENV_ROOT.'/versions/neovim/bin/python'
-let s:dein_dir = expand('$HOME/.cache/dein')
 
-" Required:
-if dein#load_state(s:dein_dir)
-  call dein#begin(s:dein_dir)
-
-  " Let dein manage dein
-  " Required:
-  let s:toml_dir = expand('$HOME/.cache/dein/plugs/')
-  call dein#load_toml(s:toml_dir . 'dein.toml',		{'lazy':0})
-  call dein#add('Shougo/deoplete.nvim')
-  call dein#add('liuchengxu/vista.vim')
-
-  call dein#add('lighttiger2505/deoplete-vim-lsp')
-
-  " Required:
-  call dein#end()
-  call dein#save_state()
-endif
-
-" Required:
-filetype plugin indent on
-syntax enable
-
-" If you want to install not installed plugins on startup.
-if dein#check_install()
-  call dein#install()
-endif
+" vim-plugによるプラグイン管理
+call plug#begin('~/.config/nvim/plugged')
+  Plug 'cohama/lexima.vim'
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'itchyny/lightline.vim'
+  Plug 'junegunn/fzf', {'dir': '~/.fzf','do': './install --all'}
+  Plug 'junegunn/fzf.vim'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'antoinemadec/coc-fzf'
+  Plug 'airblade/vim-gitgutter'
+  Plug 'liuchengxu/vista.vim'
+  Plug 'w0rp/ale'
+  Plug 'preservim/nerdtree'
+call plug#end()
 
 
-"End dein Scripts-------------------------"
+" NERDTree SETTINGS
+nmap <C-f> :NERDTreeToggle<CR>
 
-" defx Config: start -----------------
+" GitGuitter SETTINGS
+map <C-g> :GitGutterToggle<CR>
 
-autocmd FileType defx call s:defx_my_settings()
-    function! s:defx_my_settings() abort
-     " Define mappings
-      nnoremap <silent><buffer><expr> <CR>
-     \ defx#do_action('open')
-      nnoremap <silent><buffer><expr> c
-     \ defx#do_action('copy')
-      nnoremap <silent><buffer><expr> m
-     \ defx#do_action('move')
-      nnoremap <silent><buffer><expr> p
-     \ defx#do_action('paste')
-      nnoremap <silent><buffer><expr> l
-     \ defx#do_action('open')
-      nnoremap <silent><buffer><expr> E
-     \ defx#do_action('open', 'vsplit')
-      nnoremap <silent><buffer><expr> P
-     \ defx#do_action('open', 'pedit')
-      nnoremap <silent><buffer><expr> K
-     \ defx#do_action('new_directory')
-      nnoremap <silent><buffer><expr> N
-     \ defx#do_action('new_file')
-      nnoremap <silent><buffer><expr> d
-     \ defx#do_action('remove')
-      nnoremap <silent><buffer><expr> r
-     \ defx#do_action('rename')
-      nnoremap <silent><buffer><expr> x
-     \ defx#do_action('execute_system')
-      nnoremap <silent><buffer><expr> yy
-     \ defx#do_action('yank_path')
-      nnoremap <silent><buffer><expr> .
-     \ defx#do_action('toggle_ignored_files')
-      nnoremap <silent><buffer><expr> h
-     \ defx#do_action('cd', ['..'])
-      nnoremap <silent><buffer><expr> ~
-     \ defx#do_action('cd')
-      nnoremap <silent><buffer><expr> q
-     \ defx#do_action('quit')
-      nnoremap <silent><buffer><expr> <Space>
-     \ defx#do_action('toggle_select') . 'j'
-      nnoremap <silent><buffer><expr> *
-     \ defx#do_action('toggle_select_all')
-      nnoremap <silent><buffer><expr> j
-     \ line('.') == line('$') ? 'gg' : 'j'
-      nnoremap <silent><buffer><expr> k
-     \ line('.') == 1 ? 'G' : 'k'
-      nnoremap <silent><buffer><expr> <C-l>
-     \ defx#do_action('redraw')
-      nnoremap <silent><buffer><expr> <C-g>
-     \ defx#do_action('print')
-      nnoremap <silent><buffer><expr> cd
-     \ defx#do_action('change_vim_cwd')
-    endfunction
+" Airline SETTINGS
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#virtualenv#enabled = 1
+let g:airline#extensions#hunks#enabled = 0
+let g:airline#extensions#coc#enabled = 0
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#ale#error_symbol = 'E:'
+let g:airline#extensions#ale#warning_symbol = 'W:'
+nmap <C-p> <Plug>AirlineSelectPrevTab
+nmap <C-n> <Plug>AirlineSelectNextTab
 
-" defx Config: end -------------------
+" LightLine SETTINGS
+let g:lightline = {
+     \ 'colorscheme': 'wombat',
+     \ 'active': {
+     \   'right': [ ['coc'] ],
+     \   'left': [ [ 'mode', 'paste' ],
+     \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+     \ },
+     \ 'component_function': {
+     \   'cocstatus': 'coc#status'
+     \ },
+     \ }
 
+" coc.nvim SETTINGS
+highlight CocErrorSign ctermfg=15 ctermbg=196
+highlight CocWarningSign ctermfg=0 ctermbg=172
 
-" vim-lsp
-if (executable('pyls'))
-    " pylsの起動定義
-    augroup LspPython
-        autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-            \ 'name': 'pyls',
-            \ 'cmd': { server_info -> ['pyls'] },
-            \ 'whitelist': ['python'],
-            \})
-    augroup END
-endif
+"スペース2回でCocList
+nmap <silent> <space><space> :<C-u>CocList<cr>
+""スペースhでHover
+nmap <silent> <space>h :<C-u>call CocAction('doHover')<cr>
+"スペースdfでDefinition
+nmap <silent> <Leader>d <Plug>(coc-definition)
+""スペースrfでReferences
+nmap <silent> <Leader>r <Plug>(coc-references)
+"スペースrnでRename
+nmap <silent> <space>rn <Plug>(coc-rename)
 
-nnoremap <C-]> :<C-u>LspDefinition<CR>
-" 定義情報のホバー表示
-nnoremap K :<C-u>LspHover<CR>
-" 名前変更
-nnoremap <LocalLeader>R :<C-u>LspRename<CR>
-" 参照検索
-nnoremap <LocalLeader>n :<C-u>LspReferences<CR>
-" Lint結果をQuickFixで表示
-nnoremap <LocalLeader>f :<C-u>LspDocumentDiagnostics<CR>
-" テキスト整形
-nnoremap <LocalLeader>s :<C-u>LspDocumentFormat<CR>
-" オムニ補完を利用する場合、定義の追加
-set omnifunc=lsp#complete
-nmap <silent> <Leader>d :LspDefinition<CR>
-nmap <silent> <Leader>p :LspHover<CR>
-nmap <silent> <Leader>r :LspReferences<CR>
-nmap <silent> <Leader>i :LspImplementation<CR>
-nmap <silent> <Leader>s :split \| :LspDefinition <CR>
-nmap <silent> <Leader>v :vsplit \| :LspDefinition <CR>
-
-" formatter
-augroup LspAutoFormatting
-    autocmd!
-    autocmd BufWritePre *.py LspDocumentFormatSync
-augroup END
-
-" linter
-" pylsの設定。LinterのON/OFFなどが可能
-let s:pyls_config = {'pyls': {'plugins': {
-    \   'pycodestyle': {'enabled': v:true},
-    \   'pydocstyle': {'enabled': v:false},
-    \   'pylint': {'enabled': v:false},
-    \   'flake8': {'enabled': v:true},
-    \   'jedi_definition': {
-    \     'follow_imports': v:true,
-    \     'follow_builtin_imports': v:true,
-    \   },
-    \ }}}
-" pylsの起動定義
-augroup LspPython
-    autocmd!
-    autocmd User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': { server_info -> ['pyls'] },
-        \ 'whitelist': ['python'],
-        \ 'workspace_config': s:pyls_config
-        \})
-augroup END
-
-" deoplete neovim
-let g:deoplete#enable_at_startup = 1
-
-inoremap <expr><C-h> deoplete#smart_close_popup()."<C-h>"
-inoremap <expr><BS> deoplete#smart_close_popup()."<C-h>"
-
-call deoplete#custom#option({
-    \ 'auto_complete': v:true,
-    \ 'min_pattern_length': 2,
-    \ 'auto_complete_delay': 0,
-    \ 'auto_refresh_delay': 20,
-    \ 'refresh_always': v:true,
-    \ 'smart_case': v:true,
-    \ 'camel_case': v:true,
-    \ })
-let s:use_lsp_sources = ['lsp', 'dictionary', 'file']
-call deoplete#custom#option('sources', {
-    \ 'go': s:use_lsp_sources,
-    \ 'python': s:use_lsp_sources,
-    \ 'vim': ['vim', 'buffer', 'dictionary', 'file'],
-    \})
-
-" vista vim
-let g:vista_sidebar_width = 40
-let g:vista_echo_cursor = 0
-
-" デフォルトの情報ソースをctagsにする
-let g:vista_default_executive = 'ctags'
-" 特定の言語の場合vim-lspを利用した情報ソースを利用するようにする
-let g:vista_executive_for = {
-    \ 'go': 'vim_lsp',
-    \ 'python': 'vim_lsp',
-    \ }
-
-" トグル(アウトラインを非表示の場合は表示、表示済みの場合は非表示に)
-nnoremap <silent> <Leader>o :<C-u>Vista!!<CR>
-
+" ALE SETTINGS
+let g:ale_linters = {
+        \'python':['black','autopep8','isort'],
+        \'HTML':['HTMLHint'],
+        \'JavaScript':['eslint'],
+        \'c':['gcc'],
+        \'cpp':['gcc'],
+  \'scala':['scalastyle'],
+  \'go':['gofmt'],
+        \}
+let g:ale_sign_column_always = 1
+let g:ale_fix_on_save = 1
+let g:ale_fixers = {
+        \'python':['autopep8', 'black', 'isort'],
+        \'c':['clang-format'],
+        \'cpp':['clang-format'],
+  \'scala':['scalastyle'],
+  \'go':['gofmt'],
+        \}
+let g:ale_python_flake8_executable = g:python3_host_prog
+let g:ale_python_flake8_options = '-m flake8'
+let g:ale_python_autopep8_executable = g:python3_host_prog
+let g:ale_python_autopep8_options = '-m autopep8'
+let g:ale_python_isort_executable = g:python3_host_prog
+let g:ale_python_isort_options = '-m isort'
+let g:ale_python_black_executable = g:python3_host_prog
+let g:ale_python_black_options = '-m black'
+let g:ale_use_global_executables = 1
+nmap <S-f> <Plug>(ale_fix)"
+let g:ale_python_flake8_args = '--config ~/.config/flake8'
+let g:ale_python_autopep8_args = '--config ~/.config/pep8'
+let g:ale_sign_error = '⨉'
+let g:ale_sign_warning = '⚠'
 
