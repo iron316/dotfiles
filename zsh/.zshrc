@@ -1,56 +1,111 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-pyenv rehash
-export VIRTUAL_ENV_DISABLE_PROMPT=1
+# PATH
+export PATH="$HOME/nvim-macos/bin:$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
-# ailias
-alias -g la='ls -la'
-alias -g ll='ls -la'
-alias -g vi='~/local/bin/nvim.appimage'
-alias -g gpp='g++ -o a'
+# zsh history
+export HISTFILE=${HOME}/.zsh_history
+export HISTSIZE=1000
+export SAVEHIST=10000
+setopt EXTENDED_HISTORY
 
+# color
+export CLICOLOR=1
+export LSCOLORS=gxfxcxdxbxegedabagacad
+export LS_COLORS='di=36:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+zstyle ':completion:*' list-colors 'di=36' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:default' menu select=1
+
+# setopt
+setopt auto_pushd
 setopt auto_list
 setopt auto_menu
-zstyle ':completion:*:default' menu select=1
-export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-
+setopt auto_param_slash
 setopt auto_cd
+setopt share_history
+setopt hist_reduce_blanks
+setopt hist_ignore_dups
+setopt print_eight_bit
+setopt prompt_subst
+setopt nobeep
+setopt auto_param_keys
 
-# zinitが無ければgitからclone
+# alias
+alias -g la='ls -la'
+alias -g ll='ls -la'
+alias -g vi='nvim'
+alias g='git'
+alias ga='git add'
+alias gd='git diff'
+alias gs='git status'
+alias gp='git push'
+alias gb='git branch'
+alias gst='git status'
+alias gco='git checkout'
+alias gf='git fetch'
+alias gc='git commit'
+
+# zinit
 if [[ ! -d ~/.zinit ]];then
-  mkdir ~/.zinit
-  git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
+    mkdir ~/.zinit
+    git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
+    zinit self-update
 fi
+source ~/.zinit/bin/zi.zsh
 
-# zplugを使う
-source ~/.zinit/bin/zinit.zsh
 # zinit plugin
-zinit light zsh-users/zsh-autosuggestions
-zinit light peterhurford/git-aliases.zsh
-zplugin snippet OMZ::plugins/github/github.plugin.zsh
+# syntax highlight
 zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-history-substring-search
+# completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-completions
+autoload -Uz compinit && compinit
+# github
 zinit snippet OMZ::plugins/git/git.plugin.zsh
-zinit light mollifier/anyframe
-zinit snippet OMZ::lib/completion.zsh
-zinit snippet OMZ::lib/compfix.zsh
-
-[[ ! -f ~/.p10k.zsh ]] || zsh ~/.p10k.zsh
+zinit light peterhurford/git-aliases.zsh
+zinit light supercrabtree/k
+# common
+zinit light momo-lab/zsh-replace-multiple-dots
+# powerlevel10k
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 zinit ice depth=1;
 zinit light romkatv/powerlevel10k
+POWERLEVEL9JK_DISABLE_CONFIGURATION_WIZARD=true
 
-autoload -Uz compinit && compinit
-
-# fzf 関連
+# fzf
+if [[ ! -d ~/.fzf ]];then
+    mkdir ~/.fzf
+    git clone https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
+fi
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git"'
 export FZF_DEFAULT_OPTS='--color=fg+:11 --height 70% --reverse --select-1 --exit-0 --multi'
+# fzf 関数
+# branch list表示
+fbr() {
+  local branches branch
+  branches=$(git branch --all | grep -v HEAD) &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+# 移動
+fd() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+# ctrl-zで戻る
 fancy-ctrl-z () {
   if [[ $#BUFFER -eq 0 ]]; then
     BUFFER="fg"
@@ -62,8 +117,16 @@ fancy-ctrl-z () {
 }
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
-
-
+# cdr
+autoload -Uz is-at-least
+if is-at-least 4.3.11
+then
+  autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+  add-zsh-hook chpwd chpwd_recent_dirs
+  zstyle ':chpwd:*'      recent-dirs-max 500
+  zstyle ':chpwd:*'      recent-dirs-default yes
+  zstyle ':completion:*' recent-dirs-insert both
+fi
 alias cdd='fzf-cdr'
 function fzf-cdr() {
     target_dir=`cdr -l | sed 's/^[^ ][^ ]*  *//' | fzf`
@@ -72,14 +135,23 @@ function fzf-cdr() {
         cd $target_dir
     fi
 }
+# co
+alias co='git checkout $(git branch -a | tr -d " " |fzf --height 100% --prompt "CHECKOUT BRANCH>" --preview "git log --color=always {}" | head -n 1 | sed -e "s/^\*\s*//g" | perl -pe "s/remotes\/origin\///g")'
 
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+pyenv rehash
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export PATH="$HOME/.poetry/bin:$PATH"
-fpath+=~/.zfunc
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# node
 export PATH="$HOME/.nodenv/bin:$PATH"
 eval "$(nodenv init -)"
-POWERLEVEL9JK_DISABLE_CONFIGURATION_WIZARD=true
+
+# go
+export GOENV_ROOT="$HOME/.goenv"
+export PATH="$GOENV_ROOT/bin:$PATH"
+eval "$(goenv init -)"
+export PATH="$GOROOT/bin:$PATH"
+export PATH="$PATH:$GOPATH/bin"
