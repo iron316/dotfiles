@@ -2,27 +2,21 @@
     "suggest.noselect": true,
     "suggest.preferCompleteThanJumpPlaceholder": true,
     "languageserver": {
-        "clangd": {
-            "command": "clangd",
-            "args": ["--background-index"],
-            "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
-            "filetypes": ["c", "cpp", "objc", "objcpp"]
-        },
-        "dockerfile": {
-            "command": "docker-langserver",
-            "filetypes": ["dockerfile"],
-            "args": ["--stdio"]
-        },
-        "haskell": {
-            "command": "hie-wrapper",
-            "rootPatterns": [".stack.yaml", "cabal.config", "package.yaml"],
-            "filetypes": ["hs", "lhs", "haskell"],
-            "initializationOptions": {
-                "languageServerHaskell": {
-                    "hlintOn": true
-                }
-            }
-        }
+      "sql": {
+        "command": "sql-language-server",
+        "args" : ["up", "--method", "stdio"],
+        "filetypes": ["sql", "mysql"]
+      },
+      "dockerfile": {
+          "command": "docker-langserver",
+          "filetypes": ["dockerfile"],
+          "args": ["--stdio"]
+      }
     },
-    "python.jediEnabled": false
+    "python.jediEnabled": false,
+    "python.venvPath": "~/.pyenv/versions/neovim/bin/python",
+    "python.formatting.provider": "black",
+    "python.formatting.blackPath": "~/.pyenv/versions/neovim/bin/black",
+    "python.formatting.sortImports": "~/.pyenv/versions/neovim/bin/isort",
+    "python.linting.pylintEnabled": true
 }

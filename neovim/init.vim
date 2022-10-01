@@ -1,136 +1,228 @@
+" main setting
 set number
-set backspace=indent,eol,start
-set shiftwidth=4
-set smartindent
-set noswapfile
 set title
-set hidden
+set clipboard+=unnamedplus
+set noswapfile
 set cursorline
 set cursorcolumn
-set showmatch
+set autochdir
+set helplang=ja,en
+set spelllang=en,cjk
+set ambiwidth=double
+set splitright
+set wrapscan
+set ruler
+set hidden
 set mouse=a
+set cmdheight=2
+
+" encoding
+set encoding=utf-8
+scriptencoding utf-8
+set termencoding=utf-8
+set nobomb
+set fileencodings=ucs-bom,utf-8,euc-jp,cp932,sjis,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213
+set fileencoding=utf-8
+set fileformats=unix,dos,mac
+
+" color
+" syntax enable
+" colorscheme lucario
+set showmatch
+
+" indent
+set backspace=indent,eol,start
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set smartindent
 set expandtab
-set clipboard=unnamed
-syntax enable
-set signcolumn=yes
+set autoindent
 
-set wildmode=list:longest
+" search
+set ignorecase
+set incsearch
+set smartcase
+set wrapscan
+set hlsearch
+set wildmode=list:full
+nnoremap <esc><esc> :nohlsearch<cr><esc>
 
-colorscheme lucario
-set background=dark
+" remove space on wtite autocmd bufwritepre * :%s/\s\+$//ge keybind
+let mapleader = "\<space>"
 
-nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
-autocmd BufWritePre * :%s/\s\+$//ge
+" ctrl+<key>でタブの移動
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
 
-let mapleader = "\<Space>"
+" search keymap
+nnoremap <s-p>  <s-n>
+nnoremap <s-n>  n
 
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+" leader shortcut
+nnoremap <leader>w :w<cr>
+nnoremap <leader>q :q<cr>
+" spilt
+nnoremap <leader>v :vs<cr>
 
-nnoremap <Leader>v :vs<CR>
-nnoremap <Leader>h :sp<CR>
+" jj -> esc
+inoremap <silent> jj <esc>:<c-u>w<cr>
 
-inoremap <silent> jj <ESC>:<C-u>w<CR>
+" highgight word
+nnoremap <silent> <space><space> "zyiw:let @/ = '\<' . @z . '\>'<cr>:set hlsearch<cr>
 
+"  UNIX shortcut
+nnoremap <C-a> 0
+nnoremap <C-e> $
 
-let g:python3_host_prog = $PYENV_ROOT.'/versions/neovim/bin/python'
+" let g:python3_host_prog = $pyenv_root.'/versions/neovim/bin/python'
+" let g:ruby_host_prog = $rbenv_root.'/versions/3.0.1/bin/ruby'
 
-" vim-plugによるプラグイン管理
+" vim-Plugによるプラグイン管理
 call plug#begin('~/.config/nvim/plugged')
-  Plug 'cohama/lexima.vim'
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
-  Plug 'itchyny/lightline.vim'
-  Plug 'junegunn/fzf', {'dir': '~/.fzf','do': './install --all'}
-  Plug 'junegunn/fzf.vim'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  Plug 'antoinemadec/coc-fzf'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'liuchengxu/vista.vim'
-  Plug 'w0rp/ale'
-  Plug 'preservim/nerdtree'
+    " thema
+    Plug 'jacoborus/tender.vim'
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'ryanoasis/vim-devicons'
+    Plug 'kyazdani42/nvim-web-devicons'
+    Plug 't9md/vim-quickhl'
+    " filer
+    Plug 'preservim/nerdtree'
+    Plug 'Xuyuanp/nerdtree-git-plugin'
+    " 移動
+    Plug 'haya14busa/vim-edgemotion'
+    Plug 'unblevable/quick-scope'
+    " airline
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+    "  editer
+    Plug 'cohama/lexima.vim'
+    Plug 'andymass/vim-matchup'
+    Plug 'junegunn/rainbow_parentheses.vim'
+    Plug 'tyru/caw.vim'
+    " search
+    Plug 'kevinhwang91/nvim-hlslens'
+    " misc
+    Plug 'goolord/alpha-nvim'
+
+    " fzf
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    Plug 'junegunn/fzf.vim'
+    " git
+    Plug 'airblade/vim-gitgutter'
+    Plug 'tpope/vim-fugitive'
+    "copy and paste
+    Plug 'AckslD/nvim-anywise-reg.lua'
+    Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
+
+    " coc 
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'antoinemadec/coc-fzf'
+    Plug 'liuchengxu/vista.vim'
+
+"   Plug 'w0rp/ale'
+"   Plug 'slim-template/vim-slim'
 call plug#end()
 
+" nerdtree settings
+nmap <c-f> :NERDTreeToggle<cr>
 
-" NERDTree SETTINGS
-nmap <C-f> :NERDTreeToggle<CR>
+" edge motion setting
+map <C-j> <Plug>(edgemotion-j)
+map <C-k> <Plug>(edgemotion-k)
 
-" GitGuitter SETTINGS
-map <C-g> :GitGutterToggle<CR>
 
-" Airline SETTINGS
+" quick scope setting
+let g:qs_highlight_on_keys = ['f', 'F']
+
+
+" airline settings
 let g:airline_powerline_fonts = 1
+let g:airline_theme = 'deus'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#virtualenv#enabled = 1
 let g:airline#extensions#hunks#enabled = 0
 let g:airline#extensions#coc#enabled = 0
-let g:airline#extensions#ale#enabled = 1
-let g:airline#extensions#ale#error_symbol = 'E:'
-let g:airline#extensions#ale#warning_symbol = 'W:'
-nmap <C-p> <Plug>AirlineSelectPrevTab
+map <C-p> <Plug>AirlineSelectPrevTab
 nmap <C-n> <Plug>AirlineSelectNextTab
+" let g:airline#extensions#ale#enabled = 1
+" let g:airline#extensions#ale#error_symbol = 'e:'
+" let g:airline#extensions#ale#warning_symbol = 'w:'
 
-" LightLine SETTINGS
-let g:lightline = {
-     \ 'colorscheme': 'wombat',
-     \ 'active': {
-     \   'right': [ ['coc'] ],
-     \   'left': [ [ 'mode', 'paste' ],
-     \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
-     \ },
-     \ 'component_function': {
-     \   'cocstatus': 'coc#status'
-     \ },
-     \ }
+" quick highlight setting
+nmap <leader>m <Plug>(quickhl-manual-this)
+xmap <leader>m <Plug>(quickhl-manual-this)
+nmap <leader>M <Plug>(quickhl-manual-reset)
+xmap <leader>M <Plug>(quickhl-manual-reset)
 
-" coc.nvim SETTINGS
-highlight CocErrorSign ctermfg=15 ctermbg=196
-highlight CocWarningSign ctermfg=0 ctermbg=172
+" fzf setting
+let $FZF_DEFAULT_OPTS="--layout=reverse"
+let $FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git/**'"
+let g:fzf_layout = {'up':'~90%', 'window': { 'width': 0.8, 'height': 0.8,'yoffset':0.5,'xoffset': 0.5, 'border': 'sharp' } }
+nnoremap <silent> <leader>f :Files<CR>
+nnoremap <silent> <leader>g :GFiles<CR>
+nnoremap <silent> <leader>G :GFiles?<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>h :History<CR>
+nnoremap <silent> <leader>r :Rg<CR>
 
-"スペース2回でCocList
-nmap <silent> <space><space> :<C-u>CocList<cr>
-""スペースhでHover
-nmap <silent> <space>h :<C-u>call CocAction('doHover')<cr>
-"スペースdfでDefinition
-nmap <silent> <Leader>d <Plug>(coc-definition)
-""スペースrfでReferences
-nmap <silent> <Leader>r <Plug>(coc-references)
-"スペースrnでRename
-nmap <silent> <space>rn <Plug>(coc-rename)
+" git
+map <C-g> :Gvdiffsplit<CR>
 
-" ALE SETTINGS
-let g:ale_linters = {
-        \'python':['black','autopep8','isort'],
-        \'HTML':['HTMLHint'],
-        \'JavaScript':['eslint'],
-        \'c':['gcc'],
-        \'cpp':['gcc'],
-  \'scala':['scalastyle'],
-  \'go':['gofmt'],
-        \}
-let g:ale_sign_column_always = 1
-let g:ale_fix_on_save = 1
-let g:ale_fixers = {
-        \'python':['autopep8', 'black', 'isort'],
-        \'c':['clang-format'],
-        \'cpp':['clang-format'],
-  \'scala':['scalastyle'],
-  \'go':['gofmt'],
-        \}
-let g:ale_python_flake8_executable = g:python3_host_prog
-let g:ale_python_flake8_options = '-m flake8'
-let g:ale_python_autopep8_executable = g:python3_host_prog
-let g:ale_python_autopep8_options = '-m autopep8'
-let g:ale_python_isort_executable = g:python3_host_prog
-let g:ale_python_isort_options = '-m isort'
-let g:ale_python_black_executable = g:python3_host_prog
-let g:ale_python_black_options = '-m black'
-let g:ale_use_global_executables = 1
-nmap <S-f> <Plug>(ale_fix)"
-let g:ale_python_flake8_args = '--config ~/.config/flake8'
-let g:ale_python_autopep8_args = '--config ~/.config/pep8'
-let g:ale_sign_error = '⨉'
-let g:ale_sign_warning = '⚠'
+" craw setting
+nmap <C-/> <Plug>(caw:hatpos:toggle)
+vmap <C-/> <Plug>(caw:hatpos:toggle)
+
+
+" coc.nvim settings
+highlight cocerrorsign ctermfg=15 ctermbg=196
+highlight cocwarningsign ctermfg=0 ctermbg=172
+let g:coc_global_extensions = [
+      \'coc-pyright',
+      \'coc-json', 
+      \'coc-go',
+      \'coc-lists', 
+      \'coc-docker',
+      \'coc-snippets', 
+      \'coc-spell-checker', 
+      \'coc-yaml'
+\]
+
+"スペース2回でcoclist
+nmap <silent> <space><space> :<c-u>CocFzfList<cr>
+"スペースdfでdefinition
+nmap <silent> <leader>d <plug>(coc-definition)
+""スペースrfでreferences
+nmap <silent> <leader>r <plug>(coc-references)
+" format on save
+aug python
+  au!
+  au BufWrite *.py call CocAction('format')
+aug END
+
+" color load tender
+if (has("termguicolors"))
+ set termguicolors
+endif
+
+" theme
+syntax enable
+colorscheme tender
+
+" lua setting
+lua <<EOF
+-- treesitter setting
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,  -- syntax highlightを有効にするj
+  },
+  ensure_installed = 'all', -- :TSInstall allと同じ
+  -- ensure_installed = 'maintained' とすることもできる
+}
+
+-- alpha-nvim setting
+require'alpha'.setup(require'alpha.themes.startify'.config)
+-- anywise-reg
+require("anywise_reg").setup()
+EOF
 
