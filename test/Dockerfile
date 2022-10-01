@@ -12,7 +12,11 @@ RUN apt-get update \
     liblzma-dev libncursesw5-dev libreadline-dev \
     libsqlite3-dev libssl-dev libxml2-dev \
     libxmlsec1-dev llvm make tk-dev \
-    xz-utils zlib1g-dev openssl
+    xz-utils zlib1g-dev openssl \
+    software-properties-common
+RUN add-apt-repository ppa:neovim-ppa/unstable
+RUN apt-get update \
+    && apt-get install -y neovim
 
 ARG USERNAME=user
 ARG GROUPNAME=user

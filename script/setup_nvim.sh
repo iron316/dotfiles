@@ -1,7 +1,8 @@
 # download nvim
-curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
-chmod u+x nvim.appimage
-mv ./nvim.appimage ~/.local/bin/nvim
+# curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+# chmod u+x nvim.appimage
+# ./nvim.appimage --appimage-extract
+# mv ./squashfs-root/usr/bin/nvim ~/.local/bin
 
 # link nvim files
 mkdir -p ~/.config/nvim

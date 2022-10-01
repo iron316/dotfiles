@@ -26,8 +26,6 @@ set fileencoding=utf-8
 set fileformats=unix,dos,mac
 
 " color
-" syntax enable
-" colorscheme lucario
 set showmatch
 
 " indent
@@ -48,12 +46,19 @@ set hlsearch
 set wildmode=list:full
 nnoremap <esc><esc> :nohlsearch<cr><esc>
 
-" remove space on wtite autocmd bufwritepre * :%s/\s\+$//ge keybind
+" remove space on wtit
+autocmd bufwritepre * :%s/\s\+$//ge keybind
 let mapleader = "\<space>"
 
 " ctrl+<key>でタブの移動
 nnoremap <c-h> <c-w>h
+nnoremap <leader>j <c-w>j
+nnoremap <leader>k <c-w>k
 nnoremap <c-l> <c-w>l
+tnoremap <c-h> <cmd>wincmd h<cr> 
+tnoremap <c-j> <cmd>wincmd j<cr> 
+tnoremap <c-k> <cmd>wincmd k<cr> 
+tnoremap <c-l> <cmd>wincmd l<cr> 
 
 " search keymap
 nnoremap <s-p>  <s-n>
@@ -75,7 +80,9 @@ nnoremap <silent> <space><space> "zyiw:let @/ = '\<' . @z . '\>'<cr>:set hlsearc
 nnoremap <C-a> 0
 nnoremap <C-e> $
 
-" let g:python3_host_prog = $pyenv_root.'/versions/neovim/bin/python'
+"terminal mapping
+
+let g:python3_host_prog = $pyenv_root.'/versions/neovim/bin/python'
 " let g:ruby_host_prog = $rbenv_root.'/versions/3.0.1/bin/ruby'
 
 " vim-Plugによるプラグイン管理
@@ -98,13 +105,12 @@ call plug#begin('~/.config/nvim/plugged')
     "  editer
     Plug 'cohama/lexima.vim'
     Plug 'andymass/vim-matchup'
-    Plug 'junegunn/rainbow_parentheses.vim'
+    Plug 'kien/rainbow_parentheses.vim'
     Plug 'tyru/caw.vim'
     " search
     Plug 'kevinhwang91/nvim-hlslens'
     " misc
     Plug 'goolord/alpha-nvim'
-
     " fzf
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
@@ -114,14 +120,12 @@ call plug#begin('~/.config/nvim/plugged')
     "copy and paste
     Plug 'AckslD/nvim-anywise-reg.lua'
     Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
-
     " coc 
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'antoinemadec/coc-fzf'
     Plug 'liuchengxu/vista.vim'
-
-"   Plug 'w0rp/ale'
-"   Plug 'slim-template/vim-slim'
+    " terminal
+    Plug 'kassio/neoterm'
 call plug#end()
 
 " nerdtree settings
@@ -131,10 +135,8 @@ nmap <c-f> :NERDTreeToggle<cr>
 map <C-j> <Plug>(edgemotion-j)
 map <C-k> <Plug>(edgemotion-k)
 
-
 " quick scope setting
 let g:qs_highlight_on_keys = ['f', 'F']
-
 
 " airline settings
 let g:airline_powerline_fonts = 1
@@ -145,9 +147,6 @@ let g:airline#extensions#hunks#enabled = 0
 let g:airline#extensions#coc#enabled = 0
 map <C-p> <Plug>AirlineSelectPrevTab
 nmap <C-n> <Plug>AirlineSelectNextTab
-" let g:airline#extensions#ale#enabled = 1
-" let g:airline#extensions#ale#error_symbol = 'e:'
-" let g:airline#extensions#ale#warning_symbol = 'w:'
 
 " quick highlight setting
 nmap <leader>m <Plug>(quickhl-manual-this)
@@ -164,7 +163,6 @@ nnoremap <silent> <leader>g :GFiles<CR>
 nnoremap <silent> <leader>G :GFiles?<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>h :History<CR>
-nnoremap <silent> <leader>r :Rg<CR>
 
 " git
 map <C-g> :Gvdiffsplit<CR>
@@ -173,6 +171,27 @@ map <C-g> :Gvdiffsplit<CR>
 nmap <C-/> <Plug>(caw:hatpos:toggle)
 vmap <C-/> <Plug>(caw:hatpos:toggle)
 
+" rainbow
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+let g:rbpt_loadcmd_toggle = 0
+let g:rbpt_max = 16
 
 " coc.nvim settings
 highlight cocerrorsign ctermfg=15 ctermbg=196
@@ -183,7 +202,6 @@ let g:coc_global_extensions = [
       \'coc-go',
       \'coc-lists', 
       \'coc-docker',
-      \'coc-snippets', 
       \'coc-spell-checker', 
       \'coc-yaml'
 \]
@@ -199,6 +217,15 @@ aug python
   au!
   au BufWrite *.py call CocAction('format')
 aug END
+
+" terminal setting
+tnoremap <Esc> <C-\><C-n>
+let g:neoterm_default_mod = 'vertical'
+let g:neoterm_default_mod = 'belowright'
+let g:neoterm_autoinsert = 1
+let g:neoterm_size = winheight(0)/4
+nnoremap <c-t> :Tnew<CR>
+tnoremap <c-t> <C-¥><C-n>:Tclose!<CR>
 
 " color load tender
 if (has("termguicolors"))
@@ -224,5 +251,7 @@ require'nvim-treesitter.configs'.setup {
 require'alpha'.setup(require'alpha.themes.startify'.config)
 -- anywise-reg
 require("anywise_reg").setup()
+-- registers
+require("registers").setup()
 EOF
 
