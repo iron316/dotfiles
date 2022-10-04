@@ -47,7 +47,9 @@ set wildmode=list:full
 nnoremap <esc><esc> :nohlsearch<cr><esc>
 
 " remove space on wtit
-autocmd bufwritepre * :%s/\s\+$//ge keybind
+autocmd bufwritepre * :%s/\s\+$//ge
+
+"keybind
 let mapleader = "\<space>"
 
 " ctrl+<key>でタブの移動
