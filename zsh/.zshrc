@@ -39,8 +39,9 @@ setopt nobeep
 setopt auto_param_keys
 
 # alias
-alias -g la='ls -la'
-alias -g ll='ls -la'
+alias ls='ls -GF'
+alias -g la='ls -laGF --color=auto'
+alias -g ll='ls -laGF --color=auto'
 alias -g vi='nvim'
 alias g='git'
 alias ga='git add'
@@ -53,6 +54,11 @@ alias gco='git checkout'
 alias gf='git fetch'
 alias gc='git commit'
 
+# docker
+alias dcu='docker-compose up -d'
+alias dcr='docker-compose restart'
+alias dcd='docker-compose down'
+
 # zinit
 if [[ ! -d ~/.zinit ]];then
     mkdir ~/.zinit
@@ -60,25 +66,6 @@ if [[ ! -d ~/.zinit ]];then
     zinit self-update
 fi
 source ~/.zinit/bin/zi.zsh
-
-# zinit plugin
-# syntax highlight
-zinit light zsh-users/zsh-syntax-highlighting
-# completions
-zinit light zsh-users/zsh-autosuggestions
-zinit light zsh-users/zsh-completions
-autoload -Uz compinit && compinit
-# github
-zinit snippet OMZ::plugins/git/git.plugin.zsh
-zinit light peterhurford/git-aliases.zsh
-zinit light supercrabtree/k
-# common
-zinit light momo-lab/zsh-replace-multiple-dots
-# powerlevel10k
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-zinit ice depth=1;
-zinit light romkatv/powerlevel10k
-POWERLEVEL9JK_DISABLE_CONFIGURATION_WIZARD=true
 
 # fzf
 if [[ ! -d ~/.fzf ]];then
@@ -89,22 +76,7 @@ fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git"'
 export FZF_DEFAULT_OPTS='--color=fg+:11 --height 70% --reverse --select-1 --exit-0 --multi'
-# fzf 関数
-# branch list表示
-fbr() {
-  local branches branch
-  branches=$(git branch --all | grep -v HEAD) &&
-  branch=$(echo "$branches" |
-           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
-  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
-}
-# 移動
-fd() {
-  local dir
-  dir=$(find ${1:-.} -path '*/\.*' -prune \
-                  -o -type d -print 2> /dev/null | fzf +m) &&
-  cd "$dir"
-}
+
 # ctrl-zで戻る
 fancy-ctrl-z () {
   if [[ $#BUFFER -eq 0 ]]; then
@@ -117,6 +89,33 @@ fancy-ctrl-z () {
 }
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
+
+# powerlevel10k
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+zinit ice depth=1;
+zinit light romkatv/powerlevel10k
+POWERLEVEL9JK_DISABLE_CONFIGURATION_WIZARD=true
+
+# syntax highlight
+zinit light chrissicool/zsh-256color
+zinit light zsh-users/zsh-syntax-highlighting
+
+# completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-completions
+autoload -Uz compinit && compinit
+
+# github
+zinit snippet OMZ::plugins/git/git.plugin.zsh
+# co
+alias co='git checkout $(git branch -a | tr -d " " |fzf --height 100% --prompt "CHECKOUT BRANCH>" --preview "git log --color=always {}" | head -n 1 | sed -e "s/^\*\s*//g" | perl -pe "s/remotes\/origin\///g")'
+
+# 移動
+# .連打
+zinit light momo-lab/zsh-replace-multiple-dots
+# gitのrootに移動
+zinit light mollifier/cd-gitroot
+alias cdu='cd-gitroot'
 # cdr
 autoload -Uz is-at-least
 if is-at-least 4.3.11
@@ -127,6 +126,7 @@ then
   zstyle ':chpwd:*'      recent-dirs-default yes
   zstyle ':completion:*' recent-dirs-insert both
 fi
+# cdd
 alias cdd='fzf-cdr'
 function fzf-cdr() {
     target_dir=`cdr -l | sed 's/^[^ ][^ ]*  *//' | fzf`
@@ -135,9 +135,8 @@ function fzf-cdr() {
         cd $target_dir
     fi
 }
-# co
-alias co='git checkout $(git branch -a | tr -d " " |fzf --height 100% --prompt "CHECKOUT BRANCH>" --preview "git log --color=always {}" | head -n 1 | sed -e "s/^\*\s*//g" | perl -pe "s/remotes\/origin\///g")'
 
+# 言語ごとの設定
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
