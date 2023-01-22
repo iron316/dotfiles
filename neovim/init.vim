@@ -158,6 +158,7 @@ map <C-n> <Plug>AirlineSelectNextTab
 " telescope
 nnoremap <leader>f <cmd>Telescope find_files<cr>
 nnoremap <leader>g <cmd>Telescope git_files<cr>
+nnoremap <C-p> <cmd>Telescope git_files<cr>
 nnoremap <leader>l <cmd>Telescope live_grep<cr>
 nnoremap <leader>b <cmd>Telescope buffers<cr>
 nnoremap <leader>h <cmd>Telescope help_tags<cr>
@@ -206,6 +207,8 @@ require("nvim-treesitter.configs").setup {
     max_file_lines = nil, -- Do not enable for files with more than n lines, int
   }
 }
+-- hlslens
+require("hlslens").setup()
 -- anywise-reg
 require("anywise_reg").setup()
 -- registers
