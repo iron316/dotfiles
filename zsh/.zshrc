@@ -106,6 +106,7 @@ zinit light zsh-users/zsh-completions
 autoload -Uz compinit && compinit
 
 # github
+zinit snippet OMZ::lib/git.zsh
 zinit snippet OMZ::plugins/git/git.plugin.zsh
 zinit light peterhurford/git-aliases.zsh
 # co
