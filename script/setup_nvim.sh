@@ -1,8 +1,9 @@
 # download nvim
-# curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
-# chmod u+x nvim.appimage
-# ./nvim.appimage --appimage-extract
-# mv ./squashfs-root/usr/bin/nvim ~/.local/bin
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+chmod u+x nvim.appimage
+./nvim.appimage --appimage-extract
+mv ./squashfs-root ~/
+ln -s ~/squashfs-root/AppRun ~/.local/bin/nvim
 
 # link nvim files
 mkdir -p ~/.config/nvim
@@ -18,7 +19,7 @@ pip install --upgrade pip
 pip install -U pylint black isort pynvim
 deactivate
 
-# docker 
+# docker
 npm install -g dockerfile-language-server-nodejs
 
 # go

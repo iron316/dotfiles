@@ -15,6 +15,7 @@ set ruler
 set hidden
 set mouse=a
 set cmdheight=2
+set list
 
 " encoding
 set encoding=utf-8
@@ -54,12 +55,8 @@ let mapleader = "\<space>"
 
 " ctrl+<key>でタブの移動
 nnoremap <c-h> <c-w>h
-nnoremap <leader>j <c-w>j
-nnoremap <leader>k <c-w>k
 nnoremap <c-l> <c-w>l
 tnoremap <c-h> <cmd>wincmd h<cr>
-tnoremap <c-j> <cmd>wincmd j<cr>
-tnoremap <c-k> <cmd>wincmd k<cr>
 tnoremap <c-l> <cmd>wincmd l<cr>
 
 " search keymap
@@ -82,41 +79,41 @@ nnoremap <silent> <space><space> "zyiw:let @/ = '\<' . @z . '\>'<cr>:set hlsearc
 nnoremap <C-a> 0
 nnoremap <C-e> $
 
-"terminal mapping
-
+" python setting
 let g:python3_host_prog = $pyenv_root.'/versions/neovim/bin/python'
-" let g:ruby_host_prog = $rbenv_root.'/versions/3.0.1/bin/ruby'
-
 " vim-Plugによるプラグイン管理
 call plug#begin('~/.config/nvim/plugged')
+    Plug 'vim-jp/vimdoc-ja'
     " thema
-    Plug 'jacoborus/tender.vim'
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'sainnhe/gruvbox-material'
     Plug 'ryanoasis/vim-devicons'
     Plug 'kyazdani42/nvim-web-devicons'
-    Plug 't9md/vim-quickhl'
+    " treesitter
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'yioneko/nvim-yati', { 'tag': '*' }
+    Plug 'p00f/nvim-ts-rainbow'
+    " telescope
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.1' }
     " filer
     Plug 'preservim/nerdtree'
     Plug 'Xuyuanp/nerdtree-git-plugin'
-    " 移動
+    Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+    " " 移動
     Plug 'haya14busa/vim-edgemotion'
-    Plug 'unblevable/quick-scope'
     " airline
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
     "  editer
     Plug 'cohama/lexima.vim'
-    Plug 'andymass/vim-matchup'
-    Plug 'kien/rainbow_parentheses.vim'
-    Plug 'tyru/caw.vim'
+    Plug 'tpope/vim-commentary'
+    Plug 'tpope/vim-surround'
     " search
     Plug 'kevinhwang91/nvim-hlslens'
-    " misc
-    Plug 'goolord/alpha-nvim'
     " fzf
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
-    " git
+    " " git
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
     "copy and paste
@@ -124,76 +121,46 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
     " coc
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'antoinemadec/coc-fzf'
-    Plug 'liuchengxu/vista.vim'
-    " terminal
-    Plug 'kassio/neoterm'
 call plug#end()
 
 " nerdtree settings
-nmap <c-f> :NERDTreeToggle<cr>
+" let NERDTreeShowHidden = 1
+nmap <c-f> :NERDTreeToggleVCS<cr>
+
+" git
+map <C-g> :Gvdiffsplit<CR>
+map <C-b> :Git blame<CR>
 
 " edge motion setting
 map <C-j> <Plug>(edgemotion-j)
 map <C-k> <Plug>(edgemotion-k)
 
-" quick scope setting
-let g:qs_highlight_on_keys = ['f', 'F']
+" color scheme
+if has('termguicolors')
+  set termguicolors
+endif
+set background=dark
+let g:gruvbox_material_foreground = 'mix'
+let g:gruvbox_material_background = 'hard'
+let g:gruvbox_material_better_performance = 1
+let g:gruvbox_material_disable_italic_comment = 0
+colorscheme gruvbox-material
 
 " airline settings
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'deus'
+let g:airline_theme = 'gruvbox_material'
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#virtualenv#enabled = 1
 let g:airline#extensions#hunks#enabled = 0
 let g:airline#extensions#coc#enabled = 0
 map <C-p> <Plug>AirlineSelectPrevTab
-nmap <C-n> <Plug>AirlineSelectNextTab
+map <C-n> <Plug>AirlineSelectNextTab
 
-" quick highlight setting
-nmap <leader>m <Plug>(quickhl-manual-this)
-xmap <leader>m <Plug>(quickhl-manual-this)
-nmap <leader>M <Plug>(quickhl-manual-reset)
-xmap <leader>M <Plug>(quickhl-manual-reset)
-
-" fzf setting
-let $FZF_DEFAULT_OPTS="--layout=reverse"
-let $FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git/**'"
-let g:fzf_layout = {'up':'~90%', 'window': { 'width': 0.8, 'height': 0.8,'yoffset':0.5,'xoffset': 0.5, 'border': 'sharp' } }
-nnoremap <silent> <leader>f :Files<CR>
-nnoremap <silent> <leader>g :GFiles<CR>
-nnoremap <silent> <leader>G :GFiles?<CR>
-nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>h :History<CR>
-
-" git
-map <C-g> :Gvdiffsplit<CR>
-
-" craw setting
-nmap <C-/> <Plug>(caw:hatpos:toggle)
-vmap <C-/> <Plug>(caw:hatpos:toggle)
-
-" rainbow
-let g:rbpt_colorpairs = [
-    \ ['brown',       'RoyalBlue3'],
-    \ ['Darkblue',    'SeaGreen3'],
-    \ ['darkgray',    'DarkOrchid3'],
-    \ ['darkgreen',   'firebrick3'],
-    \ ['darkcyan',    'RoyalBlue3'],
-    \ ['darkred',     'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['brown',       'firebrick3'],
-    \ ['gray',        'RoyalBlue3'],
-    \ ['black',       'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue',    'firebrick3'],
-    \ ['darkgreen',   'RoyalBlue3'],
-    \ ['darkcyan',    'SeaGreen3'],
-    \ ['darkred',     'DarkOrchid3'],
-    \ ['red',         'firebrick3'],
-    \ ]
-let g:rbpt_loadcmd_toggle = 0
-let g:rbpt_max = 16
+" telescope
+nnoremap <leader>f <cmd>Telescope find_files<cr>
+nnoremap <leader>g <cmd>Telescope git_files<cr>
+nnoremap <leader>l <cmd>Telescope live_grep<cr>
+nnoremap <leader>b <cmd>Telescope buffers<cr>
+nnoremap <leader>h <cmd>Telescope help_tags<cr>
 
 " coc.nvim settings
 highlight cocerrorsign ctermfg=15 ctermbg=196
@@ -207,53 +174,40 @@ let g:coc_global_extensions = [
       \'coc-spell-checker',
       \'coc-yaml'
 \]
-
-"スペース2回でcoclist
-nmap <silent> <space><space> :<c-u>CocFzfList<cr>
-"スペースdfでdefinition
+" 定義ジャンプ
 nmap <silent> <leader>d <plug>(coc-definition)
-""スペースrfでreferences
-nmap <silent> <leader>r <plug>(coc-references)
-" format on save
-aug python
-  au!
-  au BufWrite *.py call CocAction('format')
-aug END
 
-" terminal setting
-tnoremap <Esc> <C-\><C-n>
-let g:neoterm_default_mod = 'vertical'
-let g:neoterm_default_mod = 'belowright'
-let g:neoterm_autoinsert = 1
-let g:neoterm_size = winheight(0)/4
-nnoremap <c-t> :Tnew<CR>
-tnoremap <c-t> <C-¥><C-n>:Tclose!<CR>
-
-" color load tender
-if (has("termguicolors"))
- set termguicolors
-endif
-
-" theme
-syntax enable
-colorscheme tender
-
-" lua setting
+" Lua
 lua <<EOF
 -- treesitter setting
-require'nvim-treesitter.configs'.setup {
+require("nvim-treesitter.configs").setup {
   highlight = {
-    enable = true,  -- syntax highlightを有効にするj
+    enable = true,  -- syntax highlightを有効にする
   },
-  ensure_installed = 'all', -- :TSInstall allと同じ
+  ensure_installed = {"go", "python", "dockerfile", "vim", "lua"},
   -- ensure_installed = 'maintained' とすることもできる
 }
-
--- alpha-nvim setting
-require('alpha').setup(require'alpha.themes.startify'.config)
+require("nvim-treesitter.configs").setup {
+  yati = {
+    enable = true,
+    default_lazy = true,
+    default_fallback = "auto"
+  },
+  indent = {
+    enable = false -- disable builtin indent module
+  }
+}
+require("nvim-treesitter.configs").setup {
+  highlight = {
+  },
+  rainbow = {
+    enable = true,
+    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    max_file_lines = nil, -- Do not enable for files with more than n lines, int
+  }
+}
 -- anywise-reg
 require("anywise_reg").setup()
 -- registers
 require("registers").setup()
 EOF
-

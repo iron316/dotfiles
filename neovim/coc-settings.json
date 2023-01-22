@@ -19,4 +19,7 @@
     "python.formatting.blackPath": "~/.pyenv/versions/neovim/bin/black",
     "python.formatting.sortImports": "~/.pyenv/versions/neovim/bin/isort",
     "python.linting.pylintEnabled": true
+    "coc.preferences.formatOnSaveFiletypes": [
+     "go", "python", "markdown", "dockerfile"
+    ]
 }
