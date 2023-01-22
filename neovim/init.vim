@@ -57,10 +57,10 @@ nnoremap <c-h> <c-w>h
 nnoremap <leader>j <c-w>j
 nnoremap <leader>k <c-w>k
 nnoremap <c-l> <c-w>l
-tnoremap <c-h> <cmd>wincmd h<cr> 
-tnoremap <c-j> <cmd>wincmd j<cr> 
-tnoremap <c-k> <cmd>wincmd k<cr> 
-tnoremap <c-l> <cmd>wincmd l<cr> 
+tnoremap <c-h> <cmd>wincmd h<cr>
+tnoremap <c-j> <cmd>wincmd j<cr>
+tnoremap <c-k> <cmd>wincmd k<cr>
+tnoremap <c-l> <cmd>wincmd l<cr>
 
 " search keymap
 nnoremap <s-p>  <s-n>
@@ -122,7 +122,7 @@ call plug#begin('~/.config/nvim/plugged')
     "copy and paste
     Plug 'AckslD/nvim-anywise-reg.lua'
     Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
-    " coc 
+    " coc
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'antoinemadec/coc-fzf'
     Plug 'liuchengxu/vista.vim'
@@ -200,11 +200,11 @@ highlight cocerrorsign ctermfg=15 ctermbg=196
 highlight cocwarningsign ctermfg=0 ctermbg=172
 let g:coc_global_extensions = [
       \'coc-pyright',
-      \'coc-json', 
+      \'coc-json',
       \'coc-go',
-      \'coc-lists', 
+      \'coc-lists',
       \'coc-docker',
-      \'coc-spell-checker', 
+      \'coc-spell-checker',
       \'coc-yaml'
 \]
 
@@ -250,7 +250,7 @@ require'nvim-treesitter.configs'.setup {
 }
 
 -- alpha-nvim setting
-require'alpha'.setup(require'alpha.themes.startify'.config)
+require('alpha').setup(require'alpha.themes.startify'.config)
 -- anywise-reg
 require("anywise_reg").setup()
 -- registers
